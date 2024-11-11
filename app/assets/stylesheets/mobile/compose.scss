@@ -6,6 +6,14 @@
   display: none !important; // can be removed if inline JS CSS is removed from composer-popup
 }
 
+// Firefox for Android hack
+@supports (-moz-appearance: none) {
+  .keyboard-visible #reply-control.open {
+    position: sticky;
+    height: calc(100vh - var(--header-offset, 4em));
+  }
+}
+
 #reply-control {
   z-index: z("mobile-composer");
 
@@ -30,14 +38,6 @@
     height: calc(var(--composer-vh, 1vh) * 100);
     .reply-area {
       padding-bottom: 6px;
-    }
-  }
-
-  // Firefox for Android hack
-  @supports (-moz-appearance: none) {
-    .keyboard-visible #reply-control.open {
-      position: sticky;
-      height: calc(100vh - var(--header-offset, 4em));
     }
   }
 
