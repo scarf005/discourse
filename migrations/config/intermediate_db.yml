@@ -18,15 +18,6 @@ schema:
           - "seen_notification_id"
           - "username_lower"
 
-    posts:
-      columns:
-        modify:
-          - name: "id"
-            datatype: text
-        add:
-          - name: "tag_group_id"
-            datatype: integer
-
   global:
     columns:
       modify:
@@ -148,6 +139,7 @@ schema:
         - "post_search_data"
         - "post_stats"
         - "post_timings"
+        - "posts"
         - "problem_check_trackers"
         - "published_pages"
         - "push_subscriptions"
