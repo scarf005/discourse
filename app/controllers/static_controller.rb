@@ -128,15 +128,16 @@ class StaticController < ApplicationController
     redirect_location = params[:redirect]
     if redirect_location.present? && !redirect_location.is_a?(String)
       raise Discourse::InvalidParameters.new(:redirect)
-    elsif redirect_location.present? && !redirect_location === login_path
+    elsif redirect_location.present?
       begin
         forum_uri = URI(Discourse.base_url)
         uri = URI(redirect_location)
 
         Rails.logger.warn("URI: #{uri}")
 
-        if uri.path.present? && (uri.host.blank? || uri.host == forum_uri.host) &&
-             uri.path =~ %r{\A\/[^\s]*\z}
+        pp uri.path
+        if uri.path.present? && !uri.path.start_with?(login_path) &&
+             (uri.host.blank? || uri.host == forum_uri.host) && uri.path =~ %r{\A\/[^\s]*\z}
           destination = "#{uri.path}#{uri.query ? "?#{uri.query}" : ""}"
         end
       rescue URI::Error => e
