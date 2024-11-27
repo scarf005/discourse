@@ -134,7 +134,7 @@ class StaticController < ApplicationController
         uri = URI(redirect_location)
 
         if uri.path.present? && (uri.host.blank? || uri.host == forum_uri.host) &&
-             uri.path =~ %r{\A\/{1}[^\.\s]*\z}
+             uri.path =~ %r{\A\/[^\s]*\z}
           destination = "#{uri.path}#{uri.query ? "?#{uri.query}" : ""}"
         end
       rescue URI::Error

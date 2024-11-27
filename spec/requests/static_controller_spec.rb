@@ -321,6 +321,19 @@ RSpec.describe StaticController do
       end
     end
 
+    context "with a valid URL containing dots in the query parameters" do
+      it "redirects to the route" do
+        post "/login.json",
+             params: {
+               redirect:
+                 "#{Discourse.base_url}/about?client_id=ID&redirect_uri=https%3A%2F%2Fsomesite.discourse.group",
+             }
+        expect(response).to redirect_to(
+          "/about?client_id=ID&redirect_uri=https%3A%2F%2Fsomesite.discourse.group",
+        )
+      end
+    end
+
     context "when the redirect path is invalid" do
       it "redirects to the root URL" do
         post "/login.json", params: { redirect: "test" }
