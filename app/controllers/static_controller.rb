@@ -142,6 +142,8 @@ class StaticController < ApplicationController
       end
     end
 
+    Rails.logger.warn("Redirecting to: #{destination}")
+
     redirect_to(destination, allow_other_host: false)
   end
 
