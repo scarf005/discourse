@@ -736,7 +736,6 @@ export default class TextareaTextManipulation {
     }
   }
 
-  @bind
   async inCodeBlock() {
     return inCodeBlock(
       this.$textarea.value ?? this.$textarea.val(),
