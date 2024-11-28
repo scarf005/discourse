@@ -567,7 +567,7 @@ acceptance("Composer", function (needs) {
     );
   });
 
-  test("Composer can toggle between edit and reply", async function (assert) {
+  test("Composer can toggle between edit and reply on the OP", async function (assert) {
     await visit("/t/this-is-a-test-topic/9");
 
     await click(".topic-post:nth-of-type(1) button.edit");
@@ -575,11 +575,32 @@ acceptance("Composer", function (needs) {
       query(".d-editor-input").value.startsWith("This is the first post."),
       "populates the input with the post text"
     );
+
     await click(".topic-post:nth-of-type(1) button.reply");
-    assert.strictEqual(query(".d-editor-input").value, "", "clears the input");
+    assert.dom(".d-editor-input").hasNoValue("clears the composer input");
+
     await click(".topic-post:nth-of-type(1) button.edit");
     assert.true(
       query(".d-editor-input").value.startsWith("This is the first post."),
+      "populates the input with the post text"
+    );
+  });
+
+  test("Composer can toggle between edit and reply on a reply", async function (assert) {
+    await visit("/t/this-is-a-test-topic/9");
+
+    await click(".topic-post:nth-of-type(2) button.edit");
+    assert.true(
+      query(".d-editor-input").value.startsWith("This is the second post."),
+      "populates the input with the post text"
+    );
+
+    await click(".topic-post:nth-of-type(2) button.reply");
+    assert.dom(".d-editor-input").hasNoValue("clears the composer input");
+
+    await click(".topic-post:nth-of-type(2) button.edit");
+    assert.true(
+      query(".d-editor-input").value.startsWith("This is the second post."),
       "populates the input with the post text"
     );
   });
@@ -787,12 +808,9 @@ acceptance("Composer", function (needs) {
         i18n("post.cancel_composer.keep_editing"),
         "has keep editing button"
       );
+
     await click(".d-modal__footer button.save-draft");
-    assert.strictEqual(
-      query(".d-editor-input").value,
-      "",
-      "clears the composer input"
-    );
+    assert.dom(".d-editor-input").hasNoValue("clears the composer input");
   });
 
   test("Checks for existing draft", async function (assert) {
