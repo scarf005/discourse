@@ -5,10 +5,36 @@
 define("discourse/lib/deprecate-shim", ["exports"], function (exports) {
   exports.applyShim = function () {
     let handler = () => {};
-    require("@ember/debug/lib/deprecate").registerHandler = (fn) => {
-      const next = handler;
-      handler = (message, options) => fn(message, options, next);
-    };
+
+    // the method registerHandler are exported in the modules is a getter which we can't override directly, so we need
+    // to redefine it
+    Object.defineProperty(
+      require("@ember/debug/lib/deprecate"),
+      "registerHandler",
+      {
+        get() {
+          return (fn) => {
+            const next = handler;
+            handler = (message, options) => fn(message, options, next);
+          };
+        },
+      }
+    );
+
+    // @ember/debug.registerDeprecationHandler is an alias to @ember/debug/lib/deprecate.registerHandler
+    // since it's also exported as a getter we need to redefine it
+    const registerDeprecationHandler =
+      require("@ember/debug/lib/deprecate").registerHandler;
+
+    Object.defineProperty(
+      require("@ember/debug"),
+      "registerDeprecationHandler",
+      {
+        get() {
+          return registerDeprecationHandler;
+        },
+      }
+    );
 
     require("@ember/debug").deprecate = (message, test, options) => {
       if (test) {
