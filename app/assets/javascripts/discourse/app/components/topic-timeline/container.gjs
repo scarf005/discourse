@@ -50,6 +50,9 @@ export function timelineDate(date) {
       : "timeline_date";
   return moment(date).format(i18n(`dates.${fmt}`));
 }
+export function timelineDateTime(date) {
+  return moment(date).format();
+}
 
 export default class TopicTimelineScrollArea extends Component {
   @service appEvents;
@@ -229,6 +232,9 @@ export default class TopicTimelineScrollArea extends Component {
 
   get startDate() {
     return timelineDate(this.args.model.createdAt);
+  }
+  get startIsoDate() {
+    return timelineDateTime(this.args.model.createdAt);
   }
 
   get nowDateOptions() {
@@ -570,9 +576,7 @@ export default class TopicTimelineScrollArea extends Component {
             title={{i18n "topic_entrance.jump_top_button_title"}}
             class="start-date"
           >
-            <span>
-              {{this.startDate}}
-            </span>
+            <time datetime={{this.startIsoDate}}>{{this.startDate}}</time>
           </a>
         </div>
 
